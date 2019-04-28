@@ -1,15 +1,7 @@
 # Changelog
 
-## 1.0.0 (2018-02-15)
+## 1.0.0 (2019-04-28)
 
 **Implemented enhancements:**
 
-- 
-
-**Closed issues:**
-
--
-
-**Merged pull requests:**
-
-- 
+- Added REST API logging into `shopware-root/var/log/rest_api_*.log` files

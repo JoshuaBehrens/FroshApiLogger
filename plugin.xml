@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
+    <label lang="en">API Logger</label>
+    <version>0.0.1</version>
+    <copyright>Friends of Shopware</copyright>
+    <license>MIT</license>
+    <link>https://friendsofshopware.github.io/</link>
+    <author>Friends of Shopware</author>
+    <compatibility minVersion="5.2.0" />
+    <changelog version="1.0.0">
+        <changes lang="en">
+            <![CDATA[<ul>
+                <li>Log REST API calls</li>
+            </ul>]]>
+        </changes>
+        <changes lang="de">
+            <![CDATA[<ul>
+                <li>Speichern von REST API Aufrufen</li>
+            </ul>]]>
+        </changes>
+    </changelog>
+    <description>
+        <![CDATA[
+            <b>REST API Calls</b>
+            <p>REST API Calls are logged when plugin is active and are placed into <span style="font-family:monospace">/showpare-root/var/log/rest_api_*.log</span> files.</p>
+        ]]>
+    </description>
+    <description lang="de">
+        <![CDATA[
+            <b>REST API Aufrufe</b>
+            <p>REST API Aufrufe werden, wenn das Plugin aktiv geschaltet ist, in <span style="font-family:monospace">/showpare-root/var/log/rest_api_*.log</span> abgelegt.</p>
+        ]]>
+    </description>
+</plugin>
