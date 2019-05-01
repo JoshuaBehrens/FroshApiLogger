@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.5/engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element required="true" type="boolean">
+            <name>log_rest_api</name>
+            <label lang="de">REST API-Aufrufe loggen</label>
+            <label lang="en">Log REST API calls</label>
+            <value>true</value>
+        </element>
+    </elements>
+</config>

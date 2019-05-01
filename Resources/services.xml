@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service class="Monolog\Formatter\LineFormatter"
+                 id="frosh_api_logger.services.rest_api.log_file_logger_monolog_http_formatter">
+            <argument><![CDATA[[%%datetime%%] sent by %%context.user%%
+%%context.method%% %%context.uri%% %%context.http%%
+%%context.headers%%
+
+%%message%%
+
+
+]]></argument>
+            <argument>null</argument>
+            <argument>true</argument>
+            <argument>true</argument>
+        </service>
+        <service class="Monolog\Handler\RotatingFileHandler"
+                 id="frosh_api_logger.services.rest_api.log_file_logger_monolog_handler"
+                 public="false">
+            <argument>%kernel.logs_dir%/rest_api_%kernel.environment%.log</argument>
+            <call method="setFormatter">
+                <argument id="frosh_api_logger.services.rest_api.log_file_logger_monolog_http_formatter" type="service"/>
+            </call>
+        </service>
+        <service class="Monolog\Processor\PsrLogMessageProcessor"
+                 id="frosh_api_logger.services.rest_api.log_file_logger_monolog_processor"
+                 public="false"/>
+        <service class="Shopware\Components\Logger"
+                 id="frosh_api_logger.services.rest_api.log_file_logger">
+            <argument>frosh_api_logger</argument>
+            <call method="pushHandler">
+                <argument id="frosh_api_logger.services.rest_api.log_file_logger_monolog_handler" type="service"/>
+            </call>
+            <call method="pushProcessor">
+                <argument id="frosh_api_logger.services.rest_api.log_file_logger_monolog_processor" type="service"/>
+            </call>
+        </service>
+
+        <service class="FroshApiLogger\Services\Configuration"
+                 id="frosh_api_logger.services.configuration">
+            <argument id="shopware.plugin.config_reader" type="service"/>
+            <argument>%frosh_api_logger.plugin_name%</argument>
+            <argument type="expression">container.initialized('shop') ? service('shop') : null</argument>
+        </service>
+
+        <!-- Subscribers -->
+        <service class="FroshApiLogger\Subscribers\RestApi"
+                 id="frosh_api_logger.subscribers.rest_api">
+            <tag name="shopware.event_subscriber"/>
+            <argument id="frosh_api_logger.services.rest_api.log_file_logger" type="service"/>
+            <argument type="expression">container.initialized('auth') ? service('auth') : null</argument>
+            <argument type="expression">service('frosh_api_logger.services.configuration').logRestApi</argument>
+        </service>
+    </services>
+</container>
