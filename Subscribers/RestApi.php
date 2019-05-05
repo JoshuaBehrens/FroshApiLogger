@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace FroshApiLogger\Subscribers;
 
@@ -18,7 +18,7 @@ class RestApi implements SubscriberInterface
 
     private $logRestApi = false;
 
-    public function __construct(Logger $logger, Shopware_Components_Auth $auth, $logRestApi)
+    public function __construct(Logger $logger, Shopware_Components_Auth $auth, bool $logRestApi)
     {
         $this->logger = $logger;
         $this->auth = $auth;
@@ -32,7 +32,7 @@ class RestApi implements SubscriberInterface
         ];
     }
 
-    public function onPreDispatchApi(Enlight_Event_EventArgs $args)
+    public function onPreDispatchApi(Enlight_Event_EventArgs $args): void
     {
         if (!$this->logRestApi) {
             return;
@@ -54,7 +54,7 @@ class RestApi implements SubscriberInterface
         }
     }
 
-    protected function getAllHeaders()
+    protected function getAllHeaders(): string
     {
         // TODO might not work with ppm. Need this information from the request but Enlight Request hasn't
 
@@ -71,10 +71,10 @@ class RestApi implements SubscriberInterface
         return implode(PHP_EOL, $headers);
     }
 
-    protected function getHttpVersion()
+    protected function getHttpVersion(): string
     {
         // TODO might not work with ppm. Need this information from the request but Enlight Request hasn't
 
-        return $_SERVER['SERVER_PROTOCOL'];
+        return strval($_SERVER['SERVER_PROTOCOL']);
     }
 }

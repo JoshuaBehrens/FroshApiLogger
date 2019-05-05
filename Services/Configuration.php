@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace FroshApiLogger\Services;
 
@@ -22,7 +22,7 @@ class Configuration
     /** @var array|null */
     private $config = null;
 
-    public function __construct(ConfigReader $configReader, $pluginName, Shop $shop = null)
+    public function __construct(ConfigReader $configReader, string $pluginName, Shop $shop = null)
     {
         $this->configReader = $configReader;
         $this->pluginName = $pluginName;
