@@ -49,6 +49,24 @@
                  id="frosh_api_logger.services.rule_repository">
             <argument id="dbal_connection" type="service"/>
         </service>
+        <service class="FroshApiLogger\Services\RuleEvaluationService"
+                 id="frosh_api_logger.services.rule_evaluation_service">
+            <argument tag="frosh_api_logger.rule_evaluator" type="tagged"/>
+        </service>
+
+        <!-- Rule Evaluators -->
+        <service class="FroshApiLogger\RuleEvaluators\TrueRuleEvaluator"
+                 id="frosh_api_logger.rule_evaluators.true_rule_evaluator">
+            <tag name="frosh_api_logger.rule_evaluator"/>
+        </service>
+        <service class="FroshApiLogger\RuleEvaluators\FalseRuleEvaluator"
+                 id="frosh_api_logger.rule_evaluators.false_rule_evaluator">
+            <tag name="frosh_api_logger.rule_evaluator"/>
+        </service>
+        <service class="FroshApiLogger\RuleEvaluators\BitOperatorRuleEvaluator"
+                 id="frosh_api_logger.rule_evaluators.bit_operator_rule_evaluator">
+            <tag name="frosh_api_logger.rule_evaluator"/>
+        </service>
 
         <!-- Subscribers -->
         <service class="FroshApiLogger\Subscribers\RestApi"
