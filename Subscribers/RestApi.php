@@ -5,6 +5,9 @@ namespace FroshApiLogger\Subscribers;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_Action;
 use Enlight_Event_EventArgs;
+use FroshApiLogger\Interfaces\RuleInterface;
+use FroshApiLogger\Services\RuleEvaluationService;
+use FroshApiLogger\Services\RuleRepository;
 use Shopware\Components\Logger;
 use Shopware_Components_Auth;
 
@@ -18,11 +21,24 @@ class RestApi implements SubscriberInterface
 
     private $logRestApi = false;
 
-    public function __construct(Logger $logger, Shopware_Components_Auth $auth, bool $logRestApi)
-    {
+    /** @var RuleRepository */
+    private $rules;
+
+    /** @var RuleEvaluationService */
+    private $eval;
+
+    public function __construct(
+        Logger $logger,
+        Shopware_Components_Auth $auth,
+        bool $logRestApi,
+        RuleRepository $rules,
+        RuleEvaluationService $eval
+    ) {
         $this->logger = $logger;
         $this->auth = $auth;
         $this->logRestApi = $logRestApi;
+        $this->rules = $rules;
+        $this->eval = $eval;
     }
 
     public static function getSubscribedEvents()
@@ -42,8 +58,15 @@ class RestApi implements SubscriberInterface
         $controller = $args->get('subject');
         $action = $controller->Request()->getActionName();
 
+        $rule = $this->getAllowedRule($controller);
+
+        if (is_null($rule)) {
+            return;
+        }
+
         if ($action === 'post' || $action === 'put' || $action === 'delete') {
             $this->logger->info('{body}', [
+                'ruleId' => $rule->getId(),
                 'user' => $this->auth->getIdentity()->username,
                 'method' => strtoupper($action),
                 'uri' => $controller->Request()->getRequestUri(),
@@ -76,5 +99,18 @@ class RestApi implements SubscriberInterface
         // TODO might not work with ppm. Need this information from the request but Enlight Request hasn't
 
         return strval($_SERVER['SERVER_PROTOCOL']);
+    }
+
+    protected function getAllowedRule(Enlight_Controller_Action $controller): ?RuleInterface
+    {
+        foreach ($this->rules->listActiveIds() as $ruleId) {
+            $rule = $this->rules->read($ruleId);
+
+            if ($this->eval->evaluate($rule, $controller->Request()) === true) {
+                return $rule;
+            }
+        }
+
+        return null;
     }
 }

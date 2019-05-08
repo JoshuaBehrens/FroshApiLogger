@@ -5,7 +5,7 @@
     <services>
         <service class="Monolog\Formatter\LineFormatter"
                  id="frosh_api_logger.services.rest_api.log_file_logger_monolog_http_formatter">
-            <argument><![CDATA[[%%datetime%%] sent by %%context.user%%
+            <argument><![CDATA[[%%datetime%%] sent by %%context.user%% (allowed by rule #%%context.ruleId%%)
 %%context.method%% %%context.uri%% %%context.http%%
 %%context.headers%%
 
@@ -75,6 +75,8 @@
             <argument id="frosh_api_logger.services.rest_api.log_file_logger" type="service"/>
             <argument type="expression">container.initialized('auth') ? service('auth') : null</argument>
             <argument type="expression">service('frosh_api_logger.services.configuration').logRestApi</argument>
+            <argument id="frosh_api_logger.services.rule_repository" type="service"/>
+            <argument id="frosh_api_logger.services.rule_evaluation_service" type="service"/>
         </service>
     </services>
 </container>
