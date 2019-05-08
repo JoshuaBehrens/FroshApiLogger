@@ -45,6 +45,10 @@
             <argument>%frosh_api_logger.plugin_name%</argument>
             <argument type="expression">container.initialized('shop') ? service('shop') : null</argument>
         </service>
+        <service class="FroshApiLogger\Services\RuleRepository"
+                 id="frosh_api_logger.services.rule_repository">
+            <argument id="dbal_connection" type="service"/>
+        </service>
 
         <!-- Subscribers -->
         <service class="FroshApiLogger\Subscribers\RestApi"
